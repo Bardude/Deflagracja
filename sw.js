@@ -2,7 +2,7 @@
 // Dane (próby i zdjęcia) są w IndexedDB i service worker ich nie dotyka.
 // Po każdej zmianie plików podbij numer wersji.
 const PREFIX = 'vulcan-baza-';
-const CACHE = PREFIX + 'v1';
+const CACHE = PREFIX + 'v2';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

@@ -129,6 +129,24 @@
   .modal p{margin:0 0 16px;line-height:1.45}
   #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom));z-index:70;background:#2c332b;color:var(--text);
     border:1px solid var(--line);padding:11px 16px;border-radius:12px;font-size:14.5px;max-width:90%;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+  .tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:4px;margin-bottom:12px}
+  .tabs button{border:0;border-radius:10px;padding:11px 4px;background:transparent;color:var(--muted);font-weight:700;font-size:14.5px;line-height:1.15}
+  .tabs button[aria-pressed="true"]{background:var(--accent);color:#1a1408}
+  .ent{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px;margin-bottom:10px}
+  .ent .hd{display:flex;gap:8px;align-items:flex-start}
+  .ent .sn{flex:none;font-size:11.5px;font-weight:800;color:#1a1408;background:var(--accent);border-radius:6px;padding:3px 6px;margin-top:2px}
+  .ent .sn.alt{background:#3a4438;color:var(--text)}
+  .ent .tt{font-weight:750;font-size:15.5px;line-height:1.3}
+  .ent .dd{font-size:13.5px;color:var(--muted);line-height:1.45;margin:6px 0 8px;font-style:italic}
+  table.t{width:100%;border-collapse:collapse;font-size:14.5px;font-variant-numeric:tabular-nums}
+  table.t th{font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);font-weight:650;text-align:right;padding:5px 6px;border-bottom:1px solid var(--line)}
+  table.t td{padding:7px 6px;text-align:right;border-bottom:1px solid #262c25}
+  table.t th:first-child,table.t td:first-child{text-align:left}
+  table.t tr:last-child td{border-bottom:0}
+  table.t td b{color:var(--accent);white-space:nowrap}
+  .ent .use{margin-top:8px}
+  .src{font-size:12px;color:var(--muted);line-height:1.5;margin:4px 2px 12px}
+  .kn li{margin-bottom:8px}
   footer{font-size:12px;line-height:1.5;color:var(--muted);text-align:center;margin-top:18px}
 </style>
 </head>
@@ -145,6 +163,12 @@
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v13M3 13l4 4 4-4M17 20V7M13 11l4-4 4 4"/></svg>
     </button>
   </header>
+
+  <nav class="tabs" id="tabs">
+    <button data-tab="list" aria-pressed="true">Moje próby</button>
+    <button data-tab="cap" aria-pressed="false">Tabela Alford</button>
+    <button data-tab="so" aria-pressed="false">Stand-off (SOP)</button>
+  </nav>
 
   <!-- ===== LISTA ===== -->
   <section id="v-list">
@@ -163,6 +187,49 @@
     <div id="list"></div>
     <div class="empty" id="empty" hidden></div>
     <footer>Dane zapisują się tylko w tym telefonie. Rób regularnie kopię: przycisk ze strzałkami u góry.</footer>
+  </section>
+
+  <!-- ===== TABELA ALFORD ===== -->
+  <section id="v-cap" hidden>
+    <div class="search">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg>
+      <input id="cq" type="search" placeholder="Szukaj: 82mm, TM-62, FAB, BLU…" autocomplete="off">
+    </div>
+    <div class="chips" id="cchips"></div>
+    <div class="stats" id="cstats"></div>
+    <div id="clist"></div>
+    <div class="empty" id="cempty" hidden>Brak pozycji pasujących do wyszukiwania.</div>
+    <div class="card note">
+      <b>Źródło:</b> Alford Product Explosive Capability Tables — sekcja VULCAN. Opisy celowania podano w oryginale.<br>
+      Kolumny: ładunek MW [g] · odstawienie [mm] · przebicie stali miękkiej [mm] lub efekt.<br>
+      Przy pancerzu walcowanym (RHA) przebicie wynosi ok. <b>80%</b> wartości dla stali miękkiej.<br>
+      VCLMS i HDV — według tabeli możliwości podobne jak Vulcan.<br>
+      Producent zastrzega, że parametry mają charakter orientacyjny i nie gwarantują wyniku.
+    </div>
+  </section>
+
+  <!-- ===== STAND-OFF (SOP) ===== -->
+  <section id="v-so" hidden>
+    <div class="src">Vulcan Standard Operating Procedures (Alford, AT-11-05-0001SCA-01-00, kwiecień 2005), rozdz. 4 — General Application Notes.</div>
+    <div class="chips" id="schips"></div>
+    <div id="slist"></div>
+    <div class="card">
+      <span class="lab">Najważniejsze zalecenia z SOP</span>
+      <ul class="note kn" style="padding-left:18px;margin:0">
+        <li><b>Mg JFC:</b> odstawienie <b>150 mm</b> okazało się skuteczne przy dużych, grubościennych bombach lotniczych. Według SOP jest też odpowiednie dla mniejszej amunicji, choć wcześniej zalecano mniejsze odległości.</li>
+        <li><b>Cu JFC:</b> do zastosowań ogólnych zalecane odstawienie <b>100 mm</b>.</li>
+        <li>Zbyt mało MW w Vulcanie może dać <b>opóźnienie</b> między odpaleniem a rozerwaniem celu albo brak zapłonu.</li>
+        <li>Mg JFC z ładunkiem ok. <b>45 g</b> przebija do ok. 50 mm stali; otwór w korpusie ma zwykle 6–8 mm.</li>
+        <li><b>Opóźnione rozerwanie:</b> wypełnienie może spokojnie się palić przez kilka minut, a korpus pęka zwykle w ciągu ok. <b>15 minut</b>. Ostrożnie z podchodzeniem — możliwe też „dogotowanie” (cook-off) boostera.</li>
+        <li><b>Duże bomby lotnicze:</b> DEODS — 40 g PE4, w oś ok. 275 mm od tyłu bomby, odstawienie 50–70 mm. Laos (seria Mk 80) — 45 g, w oś w połowie długości, odstawienie 150 mm.</li>
+        <li><b>Miny moździerzowe:</b> Mg JFC, 20 i 40 g, odstawienie ok. 50 mm, celowanie w pierścień uszczelniający (4.2" — ok. 200 mm od czoła).</li>
+        <li><b>Submunicja BLU-97:</b> Mg JFC 20 g, w bok, tak by trafić w tył miedzianej wkładki. Booster BLU-97 jest bardzo czuły — nawet strumień wody może wywołać detonację.</li>
+        <li><b>Miny ppanc.</b> (Mk 7, TM-62P, ABABIL, L3A1): Mg JFC 20–30 g, odstawienie 50–80 mm, w bok na połowie wysokości lub pionowo w dół, z ominięciem zapalnika.</li>
+        <li><b>Silniki rakietowe:</b> trzy Vulcany po 20 g z Mg JFC rozmieszczone równomiernie wzdłuż silnika — paliwo wypala się przez ściankę boczną.</li>
+        <li><b>Pod wodą:</b> konieczna przestrzeń gazowa przed wkładką (kapsuła podwodna lub pocisk podwodny); w opisanych próbach 40 g z Mg JFC.</li>
+        <li>Przebicie pancerza walcowanego (RHA) ≈ <b>0,8</b> wartości dla stali miękkiej.</li>
+      </ul>
+    </div>
   </section>
 
   <!-- ===== FORMULARZ ===== -->
@@ -312,7 +379,7 @@
   function parseNum(s){ s = String(s || '').trim().replace(/\s/g, '').replace(',', '.'); if (s === '') return { ok:true, v:null }; var n = Number(s); return { ok: isFinite(n) && n >= 0, v: n }; }
   function slug(s){ return String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g,'l').replace(/Ł/g,'L').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-|-$/g, '').toLowerCase().slice(0, 40); }
   var WYNIK = { udana:'Udana', czesciowa:'Częściowa', nieudana:'Nieudana' };
-  var DEF_WK = ['Cu JFC', 'Mg JFC', 'Cu EFP', 'Mg EFP'];
+  var DEF_WK = ['Mg JFC', 'Cu JFC', 'Mg EFP', 'Cu EFP', 'Al EFP', 'Woda (ABS)'];
 
   var toastT;
   function toast(msg){ var t = $('toast'); t.textContent = msg; t.hidden = false; clearTimeout(toastT); toastT = setTimeout(function(){ t.hidden = true; }, 3200); }
@@ -395,10 +462,13 @@
   $('viewer').addEventListener('click', function(){ this.hidden = true; });
 
   /* ================= WIDOKI ================= */
-  var VIEWS = ['list', 'form', 'detail', 'data'], cur = 'list';
+  var VIEWS = ['list', 'cap', 'so', 'form', 'detail', 'data'], TABS = ['list', 'cap', 'so'], cur = 'list';
   function show(v, push){
     VIEWS.forEach(function(n){ $('v-' + n).hidden = n !== v; });
     $('fab').hidden = v !== 'list';
+    $('tabs').hidden = TABS.indexOf(v) < 0;
+    document.querySelectorAll('[data-tab]').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.tab === v); });
+    if (TABS.indexOf(v) >= 0) lsSet('tab', v);
     cur = v; window.scrollTo(0, 0);
     if (push) history.pushState({ v:v }, '');
   }
@@ -409,7 +479,15 @@
     show(v, false);
   });
   history.replaceState({ v:'list' }, '');
-  function goList(){ if (history.state && history.state.v !== 'list') history.back(); else { renderList(); show('list', false); } }
+  var lastTab = 'list';
+  function goList(){ if (history.state && TABS.indexOf(history.state.v) < 0) history.back(); else { renderList(); show('list', false); } }
+  document.querySelectorAll('[data-tab]').forEach(function(b){
+    b.addEventListener('click', function(){
+      var v = b.dataset.tab; lastTab = v;
+      if (v === 'list') renderList();
+      history.replaceState({ v:v }, ''); show(v, false);
+    });
+  });
 
   /* ================= LISTA ================= */
   var all = [], filt = '', fAutor = '', visible = [];
@@ -523,7 +601,7 @@
     var el = $(kind === 'before' ? 'phBefore' : 'phAfter');
     el.innerHTML = work[kind].map(function(p, i){ return '<div class="ph"><img src="' + bufUrl(p.thumb) + '" alt=""><button class="x" data-k="' + kind + '" data-i="' + i + '" aria-label="Usuń zdjęcie">×</button></div>'; }).join('');
   }
-  function openForm(r){
+  function openForm(r, preset){
     editing = r || null; freeUrls(); removed = [];
     $('fTitle').textContent = r ? 'Edycja próby' : 'Nowa próba';
     $('fUxo').value = r ? r.uxo : '';
@@ -541,9 +619,170 @@
     ['eUxo', 'eNum'].forEach(function(i){ $(i).textContent = ''; });
     document.querySelectorAll('#v-form input').forEach(function(i){ i.classList.remove('bad'); });
     fillDatalists();
+    if (preset) Object.keys(preset).forEach(function(k){ if (preset[k] != null) $(k).value = preset[k]; });
     show('form', true);
   }
   $('fab').onclick = function(){ openForm(null); };
+
+  /* ================= TABELA ALFORD / STAND-OFF ================= */
+  /* ===== Dane: ALFORD PRODUCT EXPLOSIVE CAPABILITY TABLES — sekcja VULCAN =====
+     Pola: p = wkładka, s = nr (Ser), n = cel, d = opis/miejsce celowania (oryginał Alford),
+           r = wiersze [ładunek (g), odstawienie (mm), przebicie stali (mm) / efekt] */
+  var CAP = [
+    { p:'Mg JFC', s:'1', n:'Parametry ogólne — deflagracja (low order)', d:'Generalised parameters for perforation of CM cases and ignition of contents causing deflagration (Low Order) of explosive fill.',
+      r:[['15','100','16'],['20','100','23'],['20','150','25'],['30','100','32'],['30','150','35'],['40','100','40'],['40','150','45'],['50','100','42'],['50','150','48'],['50','200','35'],['50','500','18']] },
+    { p:'Mg JFC', s:'2', n:'Parametry ogólne — amunicja cienkościenna (maks. 5 mm)', d:'Generalised parameters for deflagration of thin-cased munitions (5mm max).', r:[['15','200','5'],['50','2400','5']] },
+    { p:'Mg JFC', s:'3', n:'105mm HE / Blast / Frag — pociski artyleryjskie (NATO)', d:'Aim on centre-line, just forward of the cylindrical body and the ogive.', r:[['20-30','100','6-12']] },
+    { p:'Mg JFC', s:'4', n:'155mm HE / Blast / Frag — pocisk artyleryjski', d:'Aim on centre-line, just forward of the cylindrical body and the ogive (also see Cu JFC Cone).', r:[['40','100','10-16']] },
+    { p:'Mg JFC', s:'5', n:'175mm HE / Blast / Frag — pociski artyleryjskie', d:'Centre-line, just forward of the cylindrical body and the ogive.', r:[['30','100','13']] },
+    { p:'Mg JFC', s:'6', n:'4.7 inch (120mm) SAP — pociski morskie z zapalnikiem dennym', d:'Semi Armour Piercing (SAP) tail fused naval projectiles. Aim on centre-line, approximately mid-position on the cylindrical body.', r:[['40-45','100','20-25']] },
+    { p:'Mg JFC', s:'7', n:'105mm HESH', d:'High Explosive Squash-Head projectiles. Aim on centre-line, approximately mid-position on the cylindrical body.', r:[['20','100','8']] },
+    { p:'Mg JFC', s:'8', n:'UK 81mm HE / Blast / Frag — miny moździerzowe', d:'Aim on centre-line of obturation ring.', r:[['30','100','9']] },
+    { p:'Mg JFC', s:'9', n:'FSU 82mm — miny moździerzowe', d:'Aim on centre-line, 200mm from nose of bomb.', r:[['20','100','7']] },
+    { p:'Mg JFC', s:'10', n:'Soviet 120mm — miny moździerzowe', d:'Aim on centre-line of obturation ring.', r:[['20','100','8']] },
+    { p:'Mg JFC', s:'11', n:'UK Mk7 — mina ppanc.', d:'Aim into side, angled to avoid pressure plate and fuse.', r:[['20','100','2-3']] },
+    { p:'Mg JFC', s:'12', n:'US Mk 6 — mina ppanc.', d:'Aim into side, angled to avoid pressure plate and fuse.', r:[['20','100','—']] },
+    { p:'Mg JFC', s:'13', n:'Soviet TMRP-6 (seria) — mina ppanc.', d:'Aim down into angled side to avoid steel pressure plate. Can have base fuze fitted.', r:[['20','100','7 (Plastic Body)']] },
+    { p:'Mg JFC', s:'14', n:'FSU TM-62 (seria) — mina', d:'Aim into side, angled to avoid pressure plate and fuse.', r:[['20-30','100','—']] },
+    { p:'Mg JFC', s:'15', n:'Soviet TM-46 (seria) — mina ppanc.', d:'Aim down angled through first slope section of lid. Can have base fuze fitted.', r:[['20','100','3']] },
+    { p:'Mg JFC', s:'16', n:'Soviet TM-57 (seria) — mina ppanc.', d:'Aim down angled into outer flat part of lid. Can be fitted with side fuze.', r:[['20','100','3']] },
+    { p:'Mg JFC', s:'17', n:'Yugoslav TMA-3 — mina ppanc.', d:'Aim angled through top away from fuze wells (Boosters). Can have base fuze fitted.', r:[['20','100','3 (Plastic Body)']] },
+    { p:'Mg JFC', s:'18', n:'Yugoslav TMA-4 — mina ppanc.', d:'Aim angled through top away from fuze wells (Boosters).', r:[['20','100','6 (Plastic Body)']] },
+    { p:'Mg JFC', s:'19', n:'UK MC HE — bomby lotnicze 540 lb i 1000 lb', d:'Medium Capacity (MC) HE air dropped bombs 540lb & 1000lb series. Aim on centre-line approx half-way along bomb main body.', r:[['40','100','11-16']] },
+    { p:'Mg JFC', s:'20', n:'US Low Drag GP HE — bomby lotnicze 500–2000 lb', d:'Aim on centre-line, half-way along bomb main body.', r:[['30','150','—']] },
+    { p:'Mg JFC', s:'21', n:'FSU FAB / OFAB 100–500 kg — bomby lotnicze', d:'Blast fragmentation HE air dropped bombs. Aim on centre-line half-way along bomb main body.', r:[['40-45','100','16-26']] },
+    { p:'Mg JFC', s:'22', n:'US Deep Penetration 2000 lb — bomba lotnicza', d:'Aim on centre-line, 275mm from rear of bomb.', r:[['45-50','50-100','25-28']] },
+    { p:'Mg JFC', s:'23', n:'BLU-97A / BLU-97B — submunicja', d:'Aim at side of the bomb, to hit the rear of the copper cone.', r:[['20','50','5']] },
+    { p:'Mg JFC', s:'24', n:'Silniki rakietowe — wypalenie paliwa', d:'Burning rocket fuel of all targets. Use 3 Vulcans equally spaced along rocket motor side-wall (see Mg EFP).', r:[['20','50-100','Body of Target']] },
+    { p:'Mg JFC', s:'25', n:'85mm HE (NB D-44 Z) — pocisk z łuską', d:'Attack with two Vulcans, one at ogive of shell & one ⅓ along body from base of shell.', r:[['30 (shell), 20 (case)','120','15 (shell)']] },
+    { p:'Mg JFC', s:'26', n:'73mm rakieta lotnicza z głowicą HE (NB OG-9WM U.GO-2)', d:'Air launched free flight rocket with HE warhead. Attack just in front of ogive.', r:[['20','120','10']] },
+    { p:'Mg JFC', s:'27', n:'PG-9 — głowica kumulacyjna (NB PPANC. PG-15W U.WP-9)', d:'Rocket propelled shaped charge warhead. Attack with two Vulcans, one aimed at forward end of shaped charge & one at the rocket motor.', r:[['20','120','2 or 3']] },
+    { p:'Mg JFC', s:'28', n:'TM-62M z zapalnikiem MWCZ-62 — mina ppanc.', d:'HE blast AT mine. Attack centrally & horizontally into the side of the mine body.', r:[['20','120','2 or 3']] },
+    { p:'Mg JFC', s:'29', n:'BL755 — submunicja (bez zapalnika)', d:'Aim just below apex of cone (to crush cone).', r:[['25','100','2']] },
+    { p:'Mg JFC', s:'—', n:'Mk 84 2000 lb — bomba lotnicza', d:'Attack midway along body of bomb. (W tabeli: brak danych — „?”.)', r:[['?','?','?']] },
+    { p:'Mg JFC', s:'30', n:'Mk 83 1000 lb — bomba lotnicza', d:'Attack midway along body of bomb.', r:[['30','150','10']] },
+    { p:'Mg JFC', s:'31', n:'Mk 82 (GPLD) 500 lb — bomba lotnicza', d:'Attack midway along body of bomb.', r:[['30','100-150','8']] },
+    { p:'Mg JFC', s:'32', n:'BETAB 250-OF (CZ) — bomba lotnicza', d:'Attack 40cm back from nose cone.', r:[['40','150','22,5']] },
+    { p:'Mg JFC', s:'33', n:'120mm EOFD-M (CZ) — mina moździerzowa', d:'Attack 1cm back from centre body rings.', r:[['20','100','15']] },
+    { p:'Mg JFC', s:'34', n:'OFAB-100 (CZ) — bomba lotnicza', d:'Attack 10cm behind lifting eye.', r:[['40','150','17']] },
+    { p:'Mg JFC', s:'35', n:'152mm (CZ) — pocisk artyleryjski', d:'Attack 20cm from fused end of shell.', r:[['30-40','150','15']] },
+    { p:'Mg JFC', s:'36', n:'PB-250 (BetAB) (CZ) — bomba lotnicza', d:'Attack 30cm from rear of PB case (unable to low order using Semtex 10).', r:[['50','150','26.5 (thinnest point)']] },
+    { p:'Mg JFC', s:'37', n:'SC250 GP (DE) — bomba lotnicza', d:'Aim mid-way between fuze pocket, square to case, aimed at central axis.', r:[['30','150','—']] },
+    { p:'Mg JFC', s:'38', n:'SD250 SAP (DE) — bomba lotnicza półprzeciwpancerna', d:'Aim mid-way between fuze pocket, square to case, aimed at central axis. Or at thinnest point, avoiding fuze.', r:[['40','150','—']] },
+    { p:'Mg JFC', s:'39', n:'Pocisk manewrujący (150 kg PBX 7)', d:'Cruise missile. Attack at centre point of body.', r:[['45','100','32.4 (Titanium)']] },
+    { p:'Mg JFC', s:'40', n:'105mm (non-NATO) — pocisk artyleryjski', d:'Aim on centre-line, just forward of the cylindrical body and the ogive.', r:[['20 or 30','100','8-12']] },
+    { p:'Mg JFC', s:'41', n:'Rakieta HE 2.75" M151 (ES)', d:'Use 3 Vulcans to attack: half way along warhead + third way along motor + two thirds along motor.', r:[['20','150','8'],['20','150','2'],['20','150','2']] },
+    { p:'Mg JFC', s:'42', n:'Rakieta C90 CR RB (M3) 90mm — głowica kumulacyjna (ES)', d:'Use 2 Vulcans to attack: half way along warhead + half way along motor.', r:[['20','150','5'],['20','150','4']] },
+    { p:'Mg JFC', s:'43', n:'Mina moździerzowa 120mm MAT-120 z 21 submunicjami (ES)', d:'Attack booster in front sloping section to eject rear carrier. Deal with separate bomblets individually.', r:[['20','150','6']] },
+    { p:'Mg JFC', s:'44', n:'105mm M456 A1 HEAT z traserem (ES)', d:'Use 2 Vulcans to attack: half way along shell case + half way along cylindrical part of warhead.', r:[['20','150','2'],['20','150','10']] },
+    { p:'Mg JFC', s:'45', n:'155mm ME485 A2 — oświetlający na spadochronie (fosfor) (ES)', d:'Use 2 Vulcans: aim 12cm from front of shell (not fuze) to attack black powder + aim 10cm from rear into case to disrupt case and stop phosphorus projecting backwards.', r:[['20','150','12'],['20','150','12']] },
+    { p:'Mg JFC', s:'46', n:'155mm ME-110 — dymny, biały fosfor (ES)', d:'Aim at baseplate of shell in centre to attack and initiate booster. Alternatively use 2 x 22mm Dioplex placed along length of body, opposite each other, to initiate phosphorus.', r:[['30','150','16'],['2 × 225 = 500 (Dioplex 22mm)','Contact','12']] },
+    { p:'Mg JFC', s:'47', n:'105mm HE M60 F1 (ES)', d:'Use 2 Vulcans: for shell aim centre-line, just forward of cylindrical body & the ogive + for case aim centre of body.', r:[['20','150','8'],['20','150','3']] },
+    { p:'Mg JFC', s:'48', n:'Milan 2T — pocisk w tubie (niewystrzelony)', d:'Use 3 Vulcans to attack: stand-off probe shaped charge + main warhead shaped charge + main motor.', r:[['20','150','5'],['20','150','10'],['20','150','4']] },
+    { p:'Mg JFC', s:'49', n:'Rakieta MC25 140mm (ES)', d:'Use 3 Vulcans to attack: half way along warhead + third way along motor + two thirds along motor.', r:[['20','150','10'],['20','150','2'],['20','150','2']] },
+    { p:'Mg JFC', s:'50', n:'Rakieta 107mm (CN) z głowicą odłamkową', d:'Attack warhead with Vulcan halfway along casing. Attack rocket with ½m 20mm Dioplex along body, including venturi.', r:[['20','150','8'],['150 (Dioplex 20mm)','Contact','3']] },
+    { p:'Mg JFC', s:'51', n:'Bomby rurowe domowej roboty', d:'Home made pipe bombs filled with concrete, 600g PE then compacted sand. Attack in centre of explosive area.', r:[['20','150','3']] },
+    { p:'Mg JFC', s:'52', n:'US Mk46A1 GP 500 lb (II wś) — bomba lotnicza', d:'Attack in centre away from lifting lugs.', r:[['30','130','8']] },
+    { p:'Mg JFC', s:'53', n:'Brytyjski pocisk 18-funtowy', d:'Attack in centre of body.', r:[['30','100','?']] },
+    { p:'Mg JFC', s:'54', n:'75mm HE (FR) — pocisk', d:'Attack in centre of body.', r:[['30','100','?']] },
+
+    { p:'Mg EFP', s:'1', n:'Deflagracja z dużej odległości', d:'Perforation of CM cases and ignition of contents at long range causing deflagration of explosive fill.', r:[['15','200','5'],['50','2400','5']] },
+    { p:'Mg EFP', s:'2', n:'Silniki rakietowe — wypalenie paliwa', d:'Burning rocket fuel of all targets. Use 3 Vulcans equally spaced along rocket motor side-wall.', r:[['20','50-100','Body of Target']] },
+    { p:'Mg EFP', s:'3', n:'Miedziana łuska naboju 105mm HEAT', d:'Copper charge casing for 105mm HEAT round. Attack in centre of body. Burn explosive pellet fill.', r:[['20','100','3-5']] },
+
+    { p:'Cu JFC', s:'1', n:'Przebijanie konstrukcji stalowych, betonu, cegły', d:'Perforation of steel structures and concrete or brick work.', r:[['15','100','20'],['20','75','50'],['20','100','40'],['30','75','75'],['30','100','60'],['40','75','100'],['40','100','80']] },
+    { p:'Cu JFC', s:'2', n:'Detonacja materiału pośredniego (booster)', d:'Detonation of booster explosives. Attack the booster tube either along the long axis of the bomb, or through the nose or tail fuse pocket as applicable.', r:[['50','75','118'],['50','100','90'],['50','150','65'],['50','200','40'],['50','500','20']] },
+    { p:'Cu JFC', s:'3', n:'155mm HE / Blast / Frag — pocisk', d:'Aim on centre-line, just forward of the cylindrical body and the ogive (also see Mg JFC Cone).', r:[['40','150','10-16']] },
+
+    { p:'Cu EFP', s:'1', n:'Rażenie i przebijanie celów, kruszenie materiałów kruchych', d:'Striking and perforating targets. Shattering brittle materials, producing neat holes.', r:[['20','300','10'],['30','300','15'],['50','2400','10'],['50','5500','5']] },
+    { p:'Cu EFP', s:'2', n:'Z nasadką (Nozzle) — precyzyjne otwory w metalu', d:'Pierce neat holes in metal.', r:[['50','0','15 (dia 13)']] },
+
+    { p:'Al EFP', s:'1', n:'Rażenie i przebijanie z dużej odległości, mały rykoszet', d:'Striking & perforating targets at long range with minimal ricochet.', r:[['50','2400','5']] },
+    { p:'Al EFP', s:'2', n:'Precyzyjne otwory w metalu (17–20 mm)', d:'Pierce neat holes in metal (17-20mm).', r:[['—','—','—']] },
+    { p:'Al EFP', s:'3', n:'Bomby rurowe — usunięcie zakrętki', d:'Pipe bomb end cap removal. Aim at base of screw cap using Nozzle.', r:[['20','Nozzle length','10']] },
+    { p:'Al EFP', s:'T', n:'Z nakładką trepanacyjną — płyta aluminiowa', d:'Trepanning attachment (against aluminium plate). Cutting large holes in metal targets in air or water.', r:[['15','0','5 (dia 43)'],['50','0','15 (dia 44)']] },
+    { p:'Al EFP', s:'T', n:'Z nakładką trepanacyjną — płyta stalowa', d:'Trepanning attachment (against steel plate).', r:[['50','0','8']] },
+
+    { p:'Woda (ABS)', s:'1', n:'Przebijanie amunicji w korpusie stalowym — minimalne ryzyko reakcji', d:'Liquid projectile (ABS cone set). Perforation of mild steel munitions with minimal risk of reaction of contents.', r:[['10','70','4'],['15','70','8'],['20','70','12']] },
+    { p:'Woda (ABS)', s:'2', n:'UK Mk7 — mina ppanc., rozbicie', d:'Disintegration of mine. Aim to angle attack into side or vertically downwards but avoiding fuse.', r:[['20','50','Body of Mine']] },
+    { p:'Woda (ABS)', s:'3', n:'FSU TM-62 (seria) — mina ppanc., rozbicie', d:'Aim to angle attack into side or vertically downwards but avoiding fuse.', r:[['20','50','Body of Mine']] },
+    { p:'Woda (ABS)', s:'4', n:'BLU-97A / BLU-97B — submunicja', d:'Aim at side of the bomb, to hit the rear of the copper cone.', r:[['20-30','50','5']] },
+    { p:'Woda (ABS)', s:'5', n:'UK BL-755 — submunicja', d:'Aim at side of the bomb, to hit the rear of the copper cone.', r:[['20-30','50','5']] },
+    { p:'Woda (ABS)', s:'6', n:'US M118 Rockeye — submunicja', d:'Aim at side of the bomb, to hit the rear of the copper cone.', r:[['20-30','50','5']] },
+    { p:'Woda (ABS)', s:'7', n:'RGO-88 — granat (PL)', d:'Using Nozzle, aim at centre ring to split open.', r:[['20','Nozzle length','5']] },
+    { p:'Woda (ABS)', s:'8', n:'RGZ-89 — granat (PL)', d:'Using Nozzle, aim between middle and bottom to split open.', r:[['20','Nozzle length','10']] },
+    { p:'Woda (ABS)', s:'9', n:'Z nasadką — zespoły elektromechaniczne (zidentyfikowane RTG)', d:'Electro-mechanical assembly (identified by X-ray). Aim at specific components.', r:[['10','70','Components']] }
+  ];
+
+  /* ===== Dane: VULCAN SOP (AT-11-05-0001SCA-01-00, kwiecień 2005), rozdz. 4 — General Application Notes ===== */
+  var SO = [
+    { p:'Mg JFC', n:'Magnezowy stożek kumulacyjny', a:['Przebicie korpusów amunicji i zapalenie zawartości — deflagracja wypełnienia (MW lub pirotechnicznego).'],
+      r:[['15','100','15'],['20','100','20'],['30','100','30'],['50','100','40'],['50','200','35'],['50','500','20'],['50','2400','5']] },
+    { p:'Cu JFC', n:'Miedziany stożek kumulacyjny', a:['Przebijanie konstrukcji stalowych, betonu i cegły.', 'Detonacja materiału pośredniego (boostera).'],
+      r:[['10','100','20'],['20','100','40'],['30','100','60'],['40','100','70'],['50','100','90'],['50','200','40'],['50','500','20']] },
+    { p:'Woda (ABS)', n:'Stożki plastikowe z wodą', a:['Przebicie amunicji przy minimalnym ryzyku reakcji zawartości.', 'Podniesienie ciśnienia w małej amunicji — wyrzucenie zapalnika i rozerwanie korpusu.'],
+      r:[['10','70','4'],['15','70','8'],['20','70','12']] },
+    { p:'Mg EFP', n:'Magnezowy pocisk formowany wybuchem', a:['Przebicie korpusów amunicji i zapalenie zawartości z dużej odległości — deflagracja wypełnienia.'],
+      r:[['15','200','5'],['50','2400','5']] },
+    { p:'Cu EFP', n:'Miedziany pocisk formowany wybuchem', a:['Rażenie i przebijanie celów z dużej odległości.', 'Wycinanie równych otworów w metalu (ok. 17–20 mm).'],
+      r:[['20','300','10'],['30','300','15'],['50','2400','10'],['50','5500','5']] },
+    { p:'Al EFP', n:'Aluminiowy pocisk formowany wybuchem', a:['Rażenie i przebijanie celów z dużej odległości przy minimalnym rykoszecie.', 'Wycinanie równych otworów w metalu (ok. 17–20 mm).'],
+      r:[['50','2400','5']] },
+    { p:'Nasadka', n:'Nasadka (Nozzle)', a:['Rażenie i przebijanie celów; precyzyjne otwory w metalu (ok. 1–20 mm).'],
+      r:[['10','0','5 (śr. 3) — woda'],['50','0','15 (śr. 13) — Cu EFP']] },
+    { p:'Trepanacja', n:'Nakładka trepanacyjna (Al EFP)', a:['Wycinanie dużych otworów w metalu, w powietrzu i pod wodą.'],
+      r:[['15','0','5 (śr. 43) — płyta Al'],['50','0','15 (śr. 44) — płyta Al'],['50','0','8 — płyta stalowa']] }
+  ];
+
+  function cell(v){ return esc(v); }
+  function tbl(rows, hl){
+    return '<table class="t"><thead><tr><th>MW [g]</th><th>Odstawienie [mm]</th><th>Przebicie [mm] / efekt</th></tr></thead><tbody>' +
+      rows.map(function(r){ return '<tr><td><b>' + cell(r[0]) + '</b></td><td>' + cell(r[1]) + '</td><td>' + cell(r[2]) + '</td></tr>'; }).join('') + '</tbody></table>';
+  }
+  function numOnly(s){ return /^\d+([.,]\d+)?$/.test(String(s).trim()) ? String(s).trim().replace('.', ',') : ''; }
+  var capF = '', soF = '';
+  function chipsHtml(list, curF){
+    var seen = []; list.forEach(function(e){ if (seen.indexOf(e.p) < 0) seen.push(e.p); });
+    return '<button class="chip" data-p="" aria-pressed="' + (curF === '') + '">Wszystkie</button>' +
+      seen.map(function(p){ return '<button class="chip" data-p="' + esc(p) + '" aria-pressed="' + (curF === p) + '">' + esc(p) + '</button>'; }).join('');
+  }
+  function renderCap(){
+    var q = $('cq').value.trim().toLowerCase();
+    $('cchips').innerHTML = chipsHtml(CAP, capF);
+    var vis = CAP.filter(function(e){
+      if (capF && e.p !== capF) return false;
+      if (!q) return true;
+      var hay = (e.p + ' ' + e.n + ' ' + e.d + ' ' + e.r.map(function(r){ return r.join(' '); }).join(' ')).toLowerCase();
+      return q.split(/\s+/).every(function(w){ return hay.indexOf(w) >= 0; });
+    });
+    $('cstats').innerHTML = '<b>' + vis.length + '</b> ' + plural(vis.length, 'pozycja', 'pozycje', 'pozycji') + (vis.length !== CAP.length ? ' z ' + CAP.length : '');
+    $('clist').innerHTML = vis.map(function(e){
+      var i = CAP.indexOf(e);
+      return '<div class="ent"><div class="hd"><span class="sn">' + esc(e.p) + (e.s && e.s !== '—' ? ' · ' + esc(e.s) : '') + '</span><div class="tt">' + esc(e.n) + '</div></div>' +
+        '<div class="dd">' + esc(e.d) + '</div>' + tbl(e.r) +
+        (e.r[0][0] !== '?' ? '<button class="btn sm use" data-use="' + i + '">＋ Nowa próba z tymi parametrami</button>' : '') + '</div>';
+    }).join('');
+    $('cempty').hidden = vis.length > 0;
+  }
+  $('cq').addEventListener('input', renderCap);
+  $('cchips').addEventListener('click', function(e){ var b = e.target.closest('[data-p]'); if (!b) return; capF = b.dataset.p; renderCap(); });
+  $('clist').addEventListener('click', function(e){
+    var b = e.target.closest('[data-use]'); if (!b) return;
+    var c = CAP[+b.dataset.use], r = c.r[0];
+    var name = c.n.split(' — ')[0];
+    var wk = c.p === 'Woda (ABS)' ? 'Woda (ABS)' : c.p;
+    openForm(null, { fUxo:name, fWk:wk, fMw:numOnly(r[0]), fOd:numOnly(r[1]) !== '' ? String(Math.round(Number(r[1]) / 10 * 10) / 10).replace('.', ',') : '',
+      fUw: 'Wg tabeli Alford (' + c.p + ', poz. ' + c.s + '): ' + c.d + (c.r.length > 1 ? ' [w tabeli ' + c.r.length + ' warianty ładunku]' : '') });
+    toast('Uzupełniono z tabeli — odstawienie przeliczone na cm');
+  });
+  function renderSo(){
+    $('schips').innerHTML = chipsHtml(SO, soF);
+    $('slist').innerHTML = SO.filter(function(e){ return !soF || e.p === soF; }).map(function(e){
+      return '<div class="ent"><div class="hd"><span class="sn">' + esc(e.p) + '</span><div class="tt">' + esc(e.n) + '</div></div>' +
+        '<ul class="note" style="padding-left:18px;margin:6px 0 8px">' + e.a.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' + tbl(e.r) + '</div>';
+    }).join('');
+  }
+  $('schips').addEventListener('click', function(e){ var b = e.target.closest('[data-p]'); if (!b) return; soF = b.dataset.p; renderSo(); });
   $('fCancel').onclick = function(){ history.back(); };
   ['phBefore', 'phAfter'].forEach(function(id){
     $(id).addEventListener('click', function(e){
@@ -752,8 +991,10 @@
   }
 
   /* ================= START ================= */
+  renderCap(); renderSo();
   openDB().then(function(d){ db = d; return getAllProby(); }).then(function(r){
     all = sortRecs(r || []); renderList();
+    var st = lsGet('tab'); if (st === 'cap' || st === 'so') { history.replaceState({ v:st }, ''); show(st, false); }
   }).catch(function(e){
     $('empty').hidden = false;
     $('empty').textContent = 'Nie można otworzyć bazy danych w tej przeglądarce (' + (e && e.message || e) + '). Spróbuj w Chrome lub Safari, poza trybem prywatnym.';
