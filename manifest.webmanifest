@@ -1,0 +1,17 @@
+{
+  "name": "Baza prób Vulcan – EOD",
+  "short_name": "Vulcan EOD",
+  "description": "Baza prób deflagracji UXO ładunkiem Vulcan. Działa offline, dane zostają w telefonie.",
+  "lang": "pl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#101310",
+  "theme_color": "#141814",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
